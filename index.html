@@ -159,6 +159,22 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:700;letter-spacing:
 .field textarea{resize:vertical;min-height:100px;padding:22px 16px 12px}
 .field label{position:absolute;left:16px;top:16px;font-size:13px;color:var(--muted);pointer-events:none;transition:.2s;background:var(--panel);padding:0 6px}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold)}
+
+/* FIX: Floating labels using .has-value class added via JS */
+.field.has-value label,
+.field input:focus+label,
+.field input:not(:placeholder-shown)+label,
+.field textarea:focus+label,
+.field textarea:not(:placeholder-shown)+label,
+.field select:focus+label,
+.field select:valid+label {
+  top: -8px;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
 .form-grid .field.full{grid-column:1/-1}
 .form-note{font-size:11px;color:var(--muted);text-align:center;margin-top:16px}
@@ -1193,6 +1209,22 @@ function addToCartFrom3D(){
   if(current3DCar) addToCart(current3DCar.id);
 }
 
+// Floating Label Fix
+function initFloatingLabels() {
+  document.querySelectorAll('.field input, .field textarea, .field select').forEach(el => {
+    const updateState = () => {
+      if (el.value && el.value.trim() !== '') {
+        el.closest('.field').classList.add('has-value');
+      } else {
+        el.closest('.field').classList.remove('has-value');
+      }
+    };
+    el.addEventListener('input', updateState);
+    el.addEventListener('change', updateState);
+    updateState(); // Check initial state (e.g., autofill)
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const y = document.getElementById('year');
   if(y) y.textContent = new Date().getFullYear();
@@ -1200,6 +1232,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartCount();
   renderCars();
   renderCart();
+  initFloatingLabels(); // Call the fix
 
   const dateInput = document.getElementById('td-date');
   if(dateInput){
