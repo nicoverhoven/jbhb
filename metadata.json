@@ -1,0 +1,6 @@
+{
+  "name": "FreeCVRater",
+  "description": "Free AI-powered CV and resume analyzer. Get an instant score out of 100, ATS compatibility checks, grammar corrections, and actionable recommendations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
